@@ -1,0 +1,9 @@
+{% if request.user %}
+    <a href="{% url 'logout' %}">
+        jotain1
+    </a>
+{% else %}
+    <a href="{% url 'kirjautuminen' %}">
+        jotain 2
+    </a>
+{% endif%}

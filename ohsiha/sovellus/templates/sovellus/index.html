@@ -1,0 +1,11 @@
+{% extends 'sovellus/base.html' %}
+
+{% block title %}Minun mahtava palvelu{% endblock %}
+
+{% block content %}
+	<ul>
+  	{% for video in list %}
+    	<li>{{ video.nimi }}</li>
+    {% endfor %}
+	</ul>
+{% endblock %}
