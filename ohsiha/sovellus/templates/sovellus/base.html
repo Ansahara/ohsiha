@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css" />
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'sovellus/style.css' %}" />
     <title>{% block title %}Minun sivu{% endblock %}</title>
   </head>
   <body>
