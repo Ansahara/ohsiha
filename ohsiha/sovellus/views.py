@@ -8,7 +8,9 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from .models import autot
 from .forms import indexform
+from django.conf import settings
 
+from sqlalchemy import create_engine
 from bs4 import BeautifulSoup
 
 
@@ -102,8 +104,20 @@ def index(request):
         df['moottori'] = df['moottori'].str.replace(')','')
         df['moottori'] = pd.to_numeric(df['moottori'])
 
-        for index, row in df.iterrows():
-            
+        #user = settings.DATABASES['default']['USER']
+        #password = settings.DATABASES['default']['PASSWORD']
+        #database_name = settings.DATABASES['default']['NAME']
+
+        #database_url = 'sqlite3://{user}:{password}@localhost:8000/{database_name}'.format(
+        #user=user,
+        #password=password,
+        #database_name=database_name,
+        #)
+
+        engine = create_engine('sqlite:///db.sqlite3')
+
+        df.to_sql('autot', con=engine, if_exists='replace')
+
 
         return render(request, 'sovellus/index.html', {'form': form})
     else:
