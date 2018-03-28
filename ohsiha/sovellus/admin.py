@@ -2,6 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import video
+from .models import autot
 
-admin.site.register(video)
+admin.site.register(autot)

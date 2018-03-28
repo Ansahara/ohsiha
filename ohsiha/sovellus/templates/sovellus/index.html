@@ -3,9 +3,17 @@
 {% block title %}Minun mahtava palvelu{% endblock %}
 
 {% block content %}
-	<ul>
-  	{% for video in list %}
-    	<li>{{ video.nimi }}</li>
-    {% endfor %}
-	</ul>
+
+
+	<form action="{% url 'index' %}" method="post">
+    {% csrf_token %}
+		merkki: <input type="text" name="merkki"><br>
+		malli: <input type="text" name="malli"><br>
+    <button type="submit" value="Submit">Hae</button>
+  </form>
+
+	{% for item in lista %}
+  	<li>{{ item }}</li>
+  {% endfor %}
+
 {% endblock %}

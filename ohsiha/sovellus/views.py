@@ -3,17 +3,25 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import generic
-from .models import video
+from .models import autot
 
 
 #create your views here
 
-class IndexView(generic.ListView):
-    template_name = 'sovellus/index.html'
-    context_object_name = 'list'
+def index(request):
+    lista = []
+    if request.POST:
+        form = index(request.POST)
+        merkki = form.get('merkki')
+        lista.append(merkki)
+        malli = form.get('malli')
+        lista.append(malli)
+        context = {'lista':lista}
+        return render(request, 'sovellus/index.html', context)
+    else:
+        context = {'lista':lista}
+        return render(request, 'sovellus/index.html', context)
 
-    def get_queryset(self):
-        return video.objects.all()
 
 def kirjautuminen(request):
     if request.method == 'POST':
@@ -27,4 +35,10 @@ def kirjautuminen(request):
             return redirect('index')
     else:
         form = UserCreationForm()
+    return render(request, 'sovellus/kirjautuminen.html', {'form': form})
+
+def haku(request):
+    if request.method == 'POST':
+        merkki = Merkki
+        malli = Malli
     return render(request, 'sovellus/kirjautuminen.html', {'form': form})
