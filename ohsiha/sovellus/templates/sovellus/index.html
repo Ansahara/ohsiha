@@ -4,16 +4,16 @@
 
 {% block content %}
 
-
-	<form action="{% url 'index' %}" method="post">
-    {% csrf_token %}
-		merkki: <input type="text" name="merkki"><br>
-		malli: <input type="text" name="malli"><br>
-    <button type="submit" value="Submit">Hae</button>
-  </form>
+	<form action="" method="post">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Hae" />
+	</form>
 
 	{% for item in lista %}
-  	<li>{{ item }}</li>
-  {% endfor %}
+		<li>{{ item }}</li>
+	{% endfor %}
+
+
 
 {% endblock %}

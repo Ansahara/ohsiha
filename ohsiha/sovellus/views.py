@@ -4,23 +4,28 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import generic
 from .models import autot
+from .forms import indexform
+
+
 
 
 #create your views here
 
 def index(request):
-    lista = []
-    if request.POST:
-        form = index(request.POST)
-        merkki = form.get('merkki')
+    lista = ['hähää']
+    lista_1 = ['hohoo']
+    if request.method == 'POST':
+        form = indexform(request.POST)
+        merkki = form['merkki']
         lista.append(merkki)
-        malli = form.get('malli')
+        malli = form['malli']
         lista.append(malli)
         context = {'lista':lista}
-        return render(request, 'sovellus/index.html', context)
+        return render(request, 'sovellus/index.html', {'form': form})
     else:
-        context = {'lista':lista}
-        return render(request, 'sovellus/index.html', context)
+        form = indexform()
+        context = {'lista':lista_1}
+        return render(request, 'sovellus/index.html', {'form':form}, context)
 
 
 def kirjautuminen(request):
