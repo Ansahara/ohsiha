@@ -11,6 +11,6 @@ class autot(models.Model):
     vaihteisto = models.CharField(max_length=200)
     hinta = models.IntegerField(default=0)
     tunniste = models.IntegerField(default=0)
-    moottori = models.IntegerField(default=0)
+    moottori = models.FloatField(default=0)
     vuosimalli = models.IntegerField(default=0)
     mittarilukema = models.IntegerField(default=0)

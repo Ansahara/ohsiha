@@ -21,16 +21,12 @@ from bs4 import BeautifulSoup
 #create your views here
 
 def index(request):
-    lista = ['hähää']
-    lista_1 = ['hohoo']
     if request.method == 'POST':
         autot.objects.all().delete()
         form = indexform(request.POST)
-        merkki = form['merkki']
-        lista.append(merkki)
-        malli = form['malli']
-        lista.append(malli)
-        context = {'lista':lista}
+        merkki = 'audi'
+        mallit = 'a3'
+
 
 
         vuosimalli = []
@@ -43,8 +39,8 @@ def index(request):
         moottori = []
         malli = []
 
-        linkki = 'https://www.nettiauto.com/audi/a3'
-        #linkki = "https://www.nettiauto.com/" + merkki + "/" + malli
+        #linkki = 'https://www.nettiauto.com/audi/a3'
+        linkki = "https://www.nettiauto.com/" + merkki + "/" + mallit
         response = requests.get(linkki)
         soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -129,19 +125,31 @@ def index(request):
 
         #df.to_sql('autot', con=engine, if_exists='replace')
 
+
+
         sys.path.append('C:/Users/Arttu/github/OHSIHAv1.2/ohsiha')
         os.environ["DJANGO_SETTINGS_MODULE"] = "ohsiha.settings"
 
         django.setup()
 
 
+        for index, row in df.iterrows():
+            autot.objects.create(malli='audi', vuosimalli=row['vuosimalli'],
+            kayttovoima=row['kayttovoima'], vaihteisto=row['vaihteisto'],
+            hinta=row['hinta'], tunniste=row['tunniste'],
+            moottori=row['moottori'], mittarilukema=row['mittarilukema'])
+
+        """
         for car in df:
-            car = autot.objects.create(malli='audi')
+            car = autot.objects.create(malli='audi', vuosimalli=car[0],
+            kayttovoima=car[2], vaihteisto=car[1],
+            hinta=car[3], tunniste=car[4],
+            moottori=car[0], mittarilukema=car[0])
+        """
 
         return redirect('testi')
     else:
         form = indexform()
-        context = {'lista':lista_1}
         return render(request, 'sovellus/index.html', {'form':form})
 
 
@@ -160,6 +168,6 @@ def kirjautuminen(request):
     return render(request, 'sovellus/kirjautuminen.html', {'form': form})
 
 def testi(request):
-    lista = autot.objects.order_by('hinta')[:4]
+    lista = autot.objects.order_by('hinta')[:5]
     context = {'lista':lista}
     return render(request, 'sovellus/testi.html', context)

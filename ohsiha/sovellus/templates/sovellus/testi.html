@@ -1,4 +1,13 @@
 {% extends 'sovellus/base.html' %}
-{% for item in lista %}
-  <li>{{ item }}</li>
-{% endfor %}
+{% block content %}
+  {% if lista %}
+      <ul>
+      {% for item in lista %}
+          <li>{{item.hinta}} {{item}}</li>
+      {% endfor %}
+      </ul>
+  {% else %}
+      <p>No items are available.</p>
+  {% endif %}
+
+{% endblock %}
