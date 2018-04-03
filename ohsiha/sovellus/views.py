@@ -1,5 +1,7 @@
 import requests
 import pandas as pd
+import os, sys
+import django
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -22,6 +24,7 @@ def index(request):
     lista = ['hähää']
     lista_1 = ['hohoo']
     if request.method == 'POST':
+        autot.objects.all().delete()
         form = indexform(request.POST)
         merkki = form['merkki']
         lista.append(merkki)
@@ -81,7 +84,7 @@ def index(request):
     #käydään auto kerraallaan läpi  linkki ja lisätään tiedot listaan
         for car in car_containers:
             links.append(car.get('href'))
-            hinta.append(car.get('data-price'))
+            hinta.append(int(car.get('data-price')))
             ids.append(car.get('data-id'))
 
 
@@ -90,8 +93,8 @@ def index(request):
                    'moottori':moottori, 'vaihteisto':vaihteisto, 'tunniste':ids})
 
         #muutetaan hinta numeroksi
-        df['hinta'] = pd.to_numeric(df['hinta'])
-        df['hinta'] = df['hinta'].fillna(0)
+        #df['hinta'] = pd.to_numeric(df['hinta'])
+        #df['hinta'] = df['hinta'].fillna(0)
 
         #muutetaan mittarilukema numeroksi
         df['mittarilukema'] = df['mittarilukema'].str.replace('Ajamaton','0')
@@ -104,6 +107,14 @@ def index(request):
         df['moottori'] = df['moottori'].str.replace(')','')
         df['moottori'] = pd.to_numeric(df['moottori'])
 
+        #vm numeroksi
+        df['vuosimalli'] = pd.to_numeric(df['vuosimalli'])
+
+        #tunniste numeroksi
+        df['tunniste'] = pd.to_numeric(df['tunniste'])
+
+
+
         #user = settings.DATABASES['default']['USER']
         #password = settings.DATABASES['default']['PASSWORD']
         #database_name = settings.DATABASES['default']['NAME']
@@ -114,16 +125,24 @@ def index(request):
         #database_name=database_name,
         #)
 
-        engine = create_engine('sqlite:///db.sqlite3')
+        #engine = create_engine('sqlite:///db.sqlite3')
 
-        df.to_sql('autot', con=engine, if_exists='replace')
+        #df.to_sql('autot', con=engine, if_exists='replace')
+
+        sys.path.append('C:/Users/Arttu/github/OHSIHAv1.2/ohsiha')
+        os.environ["DJANGO_SETTINGS_MODULE"] = "ohsiha.settings"
+
+        django.setup()
 
 
-        return render(request, 'sovellus/index.html', {'form': form})
+        for car in df:
+            car = autot.objects.create(malli='audi')
+
+        return redirect('testi')
     else:
         form = indexform()
         context = {'lista':lista_1}
-        return render(request, 'sovellus/index.html', {'form':form}, context)
+        return render(request, 'sovellus/index.html', {'form':form})
 
 
 def kirjautuminen(request):
@@ -140,8 +159,7 @@ def kirjautuminen(request):
         form = UserCreationForm()
     return render(request, 'sovellus/kirjautuminen.html', {'form': form})
 
-def haku(request):
-    if request.method == 'POST':
-        merkki = Merkki
-        malli = Malli
-    return render(request, 'sovellus/kirjautuminen.html', {'form': form})
+def testi(request):
+    lista = autot.objects.order_by('hinta')[:4]
+    context = {'lista':lista}
+    return render(request, 'sovellus/testi.html', context)
