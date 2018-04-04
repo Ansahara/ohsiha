@@ -139,13 +139,6 @@ def index(request):
             hinta=row['hinta'], tunniste=row['tunniste'],
             moottori=row['moottori'], mittarilukema=row['mittarilukema'])
 
-        """
-        for car in df:
-            car = autot.objects.create(malli='audi', vuosimalli=car[0],
-            kayttovoima=car[2], vaihteisto=car[1],
-            hinta=car[3], tunniste=car[4],
-            moottori=car[0], mittarilukema=car[0])
-        """
 
         return redirect('testi')
     else:
