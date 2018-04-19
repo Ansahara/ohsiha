@@ -132,12 +132,13 @@ def index(request):
 
         django.setup()
 
-
+        i=0
         for index, row in df.iterrows():
             autot.objects.create(malli='audi', vuosimalli=row['vuosimalli'],
             kayttovoima=row['kayttovoima'], vaihteisto=row['vaihteisto'],
-            hinta=row['hinta'], tunniste=row['tunniste'],
+            hinta=row['hinta'], tunniste=i,
             moottori=row['moottori'], mittarilukema=row['mittarilukema'])
+            i += 1
 
 
         return redirect('testi')
@@ -161,6 +162,55 @@ def kirjautuminen(request):
     return render(request, 'sovellus/kirjautuminen.html', {'form': form})
 
 def testi(request):
-    lista = autot.objects.order_by('hinta')[:5]
-    context = {'lista':lista}
+    kohteet = {}
+    vuosimallit = []
+    keskiarvo = {}
+    hinnat = []
+    for i in range(30):
+        auto = autot.objects.get(tunniste = i)
+        if auto.vuosimalli in kohteet:
+            kohteet[auto.vuosimalli].append(auto)
+        else:
+            kohteet[auto.vuosimalli]=[auto]
+            vuosimallit.append(auto.vuosimalli)
+
+    for vuosi in vuosimallit:
+        hinta = 0
+        for auto in kohteet[vuosi]:
+            hinta += auto.hinta
+        keskiarvo[str(vuosi)] = hinta/len(kohteet[vuosi])
+        hinnat.append(hinta/len(kohteet[vuosi]))
+
+
+
+    context = {'autot':keskiarvo}
     return render(request, 'sovellus/testi.html', context)
+
+
+
+
+def joku(request):
+
+    kohteet = {}
+    vuosimallit = []
+    keskiarvo = {}
+    hinnat = []
+    for i in range(30):
+        auto = autot.objects.get(tunniste = i)
+        if auto.vuosimalli in kohteet:
+            kohteet[auto.vuosimalli].append(auto)
+        else:
+            kohteet[auto.vuosimalli]=[auto]
+            vuosimallit.append(auto.vuosimalli)
+
+    for vuosi in vuosimallit:
+        hinta = 0
+        for auto in kohteet[vuosi]:
+            hinta += auto.hinta
+        keskiarvo[str(vuosi)] = hinta/len(kohteet[vuosi])
+        hinnat.append(hinta/len(kohteet[vuosi]))
+
+
+
+    context = {'autot':keskiarvo}
+    return render(request, 'sovellus/joku.html', context)

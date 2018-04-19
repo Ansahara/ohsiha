@@ -1,0 +1,21 @@
+{% extends 'sovellus/base.html' %}
+{% block content %}
+  {% if autot %}
+      <ul>
+      {% for auto, hinta in autot.items %}
+          <li>{{auto}}</li>
+          <li>{{hinta}}</li>
+      {% endfor %}
+      </ul>
+
+      <ul>
+      {% for hinta in hinnat %}
+          <li>{{hinta}}</li>
+      {% endfor %}
+      </ul>
+
+  {% else %}
+      <p>No items are available.</p>
+  {% endif %}
+
+{% endblock %}
