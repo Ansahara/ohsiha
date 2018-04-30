@@ -10,10 +10,9 @@
     <div id="logout">
       {% block logout %}
       {% if	user.is_authenticated	%}
-        <p>{{user.username}}</p>
+        <p>Päivää {{user.username}}</p>
         <a href="/sovellus/logout/"> Logout</a>
       {% else %}
-        <p> Kirjaudu sisaan </p>
         <a href="/sovellus/login/"> Login</a>
       {% endif %}
       {% endblock %}
